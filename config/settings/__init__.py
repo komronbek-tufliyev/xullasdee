@@ -1,5 +1,5 @@
 from .base import *
-
+from .django_jazzmin import *
 
 SECRET_KEY = env.str('SECRET_KEY')
 ENVIRONMENT = env.str('ENVIRONMENT', default='development')
