@@ -155,13 +155,13 @@ USE_DJANGO_JQUERY = True
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Django Aiogram Bot Admin",
+    "site_title": "Sciencelab Admin",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Django Aiogram Bot",
+    "site_header": "Sciencelab Admin",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "DJAIOBOT",
+    "site_brand": "Sciencelab",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
     "site_logo": None,
@@ -179,14 +179,14 @@ JAZZMIN_SETTINGS = {
     "site_icon": None,
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the Django Aiogram Bot Admin",
+    "welcome_sign": "Welcome to the Sciencelab Admin",
 
     # Copyright on the footer
-    "copyright": "Django Aiogram Bot Ltd",
+    "copyright": "Sciencelab Ltd",
 
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["app.BotUser", "app.Category", "app.Product"],
+    # "search_model": ["app.BotUser", "app.Category", "app.Product"],
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -256,13 +256,15 @@ JAZZMIN_SETTINGS = {
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
         "app": "fas fa-book-reader",
-        "app.BotUser": "fas fa-user-tie",
-        "app.Location": "fas fa-map-marker-alt",
-        "app.Category": "fas fa-list",
-        "app.SubCategory": "fas fa-list-alt",
-        "app.Product": "fas fa-shopping-cart",
-        "app.Order": "fas fa-shopping-basket",
-        "app.OrderItem": "fas fa-shopping-bag",
+        # "app.BotUser": "fas fa-user-tie",
+        # "app.Location": "fas fa-map-marker-alt",
+        # "app.Category": "fas fa-list",
+        # "app.SubCategory": "fas fa-list-alt",
+        # "app.Product": "fas fa-shopping-cart",
+        # "app.Order": "fas fa-shopping-basket",
+        # "app.OrderItem": "fas fa-shopping-bag",
+        # messages
+        # "app.Message": "fas fa-envelope",
 
     },
     # Icons that are used when one is not manually specified
@@ -299,7 +301,7 @@ JAZZMIN_SETTINGS = {
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
-    # "language_chooser": True,
+    "language_chooser": True,
 }
 # JAZZMIN_SETTINGS["show_ui_builder"] = True
 # JAZZMIN_UI_TWEAKS = {
