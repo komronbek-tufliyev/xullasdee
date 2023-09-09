@@ -14,12 +14,12 @@
 
 ## Loyiha uchun muhitni sozlash
 Loyiha uchun muhitni sozlash uchun quyidagi komandalarni bajarish kerak:
-    ```bash
+    ```
     virtualenv venv
     source venv/bin/activate # Windows uchun: venv\Scripts\activate
     ```
     Agar sizda virtual muhit bo'lmasa, quyidagi komandani bajarib o'ting:
-    ```bash
+    ```
     pip install virtualenv
     ```
 
@@ -27,7 +27,7 @@ Loyiha uchun muhitni sozlash uchun quyidagi komandalarni bajarish kerak:
 
 ## Loyihaning ishga tushirilishi
 Loyiha ishga tushirilishi uchun quyidagi komandalarni bajarish kerak:
-    ```bash
+    ```
     git clone https://github.com/komronbek-tufliyev/xullasdee.git
     cd xullasdee
     pip install -r requirements.txt
