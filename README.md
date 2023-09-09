@@ -1,10 +1,10 @@
-# xullasdee
+# XULLASDEE
 
 ## Ushbu repozitoriy haqida
-    Hali ishlanmadi
+> - Hali ishlab chiqish jarayonida bo'lgan loyiha.
 
 ## Loyihaning maqsadi
-    Maqsadlar ochiqlanmaydi :D 😁
+> - Maqsadlar ochiqlanmaydi :D 😁
 
 ## Loyiha qanday ishlaydi
  - [x] Loyihani o'zingizga clone qilib oling
@@ -13,7 +13,7 @@
 
 
 ## Loyiha uchun muhitni sozlash
-    Loyiha uchun muhitni sozlash uchun quyidagi komandalarni bajarish kerak:
+Loyiha uchun muhitni sozlash uchun quyidagi komandalarni bajarish kerak:
     ```bash
     virtualenv venv
     source venv/bin/activate # Windows uchun: venv\Scripts\activate
@@ -26,7 +26,7 @@
 
 
 ## Loyihaning ishga tushirilishi
-    Loyiha ishga tushirilishi uchun quyidagi komandalarni bajarish kerak:
+Loyiha ishga tushirilishi uchun quyidagi komandalarni bajarish kerak:
     ```bash
     git clone https://github.com/komronbek-tufliyev/xullasdee.git
     cd xullasdee
@@ -37,7 +37,7 @@
     ```
 
 ## Xulosa 
-    Loyiha hali ishlab chiqish jarayonida. Loyiha ishlab chiqilganda shu yerda xulosa qo'yiladi.
+Loyiha hali ishlab chiqish jarayonida. Loyiha ishlab chiqilganda shu yerda xulosa qo'yiladi.
 
 > Tugadi
 
