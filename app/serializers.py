@@ -6,11 +6,6 @@ class BotUserSerializer(serializers.ModelSerializer):
         model = BotUser
         fields = '__all__'
 
-class OrderSerializer(serializers.ModelSerializer):
-    files = serializers.SerializerMethodField(read_only=True, many=True)
-    class Meta:
-        model = Order
-        fields = '__all__'
 
 class OrderHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,18 +16,23 @@ class OrderFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderFile
         fields = '__all__'
-    
-class CategorySerializer(serializers.ModelSerializer):
-    subcategory = serializers.SerializerMethodField(read_only=True, many=True)
-    orders = serializers.SerializerMethodField(read_only=True, many=True)
+class OrderSerializer(serializers.ModelSerializer):
+    files = OrderFileSerializer(read_only=True, many=True)
     class Meta:
-        model = Category
+        model = Order
         fields = '__all__'
+    
 
 class SubCategorySerializer(serializers.ModelSerializer):
-    orders = serializers.SerializerMethodField(read_only=True, many=True)
+    orders = OrderSerializer(read_only=True, many=True)
     class Meta:
         model = Subcategory
+        fields = '__all__'
+class CategorySerializer(serializers.ModelSerializer):
+    subcategory = SubCategorySerializer(many=True, read_only=True)
+    orders = OrderSerializer(read_only=True, many=True)
+    class Meta:
+        model = Category
         fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
