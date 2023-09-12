@@ -36,11 +36,18 @@ def generate_categories() -> None:
     data = []
     fake = Faker()
     for _ in range(100):
+        print(_, "generatsiya")
+        name = fake.name()
+        name_uz = translate_en_uz(name)
+        name_en = name
+        name_ru = translate_en_ru(name)
+        print(f"{_}-generatsiya: {name_uz}, {name_en}, {name_ru}")
+
         data.append(Category(
-            name=fake.name(),
-            name_uz = translate_en_uz(fake.name()),
-            name_en=fake.name(),
-            name_ru=translate_en_ru(fake.name()),
+            name=name,
+            name_uz = name_uz,
+            name_en=name_en,
+            name_ru=name_ru,
             slug=fake.slug(),
         ))
     Category.objects.bulk_create(data)
@@ -49,11 +56,16 @@ def generate_subcategories() -> None:
     data = []
     fake = Faker()
     for _ in range(100):
+        name = fake.name()
+        name_uz = translate_en_uz(name)
+        name_en = name
+        name_ru = translate_en_ru(name)
+
         data.append(Subcategory(
-            name=fake.name(),
-            name_uz = translate_en_uz(fake.name()),
-            name_en=fake.name(),
-            name_ru=translate_en_ru(fake.name()),
+            name=name,
+            name_uz = name_uz,
+            name_en=name_en,
+            name_ru=name_ru,
             slug=fake.slug(),
             category=Category.objects.get(id=fake.random_int(min=1, max=100)),
         ))
@@ -64,14 +76,19 @@ def generate_orders() -> None:
     data = []
     fake = Faker()
     for _ in range(100):
+        description = fake.text()
+        description_ru = translate_en_ru(description)
+        description_uz = translate_en_uz(description)
+        description_en = description
+
         data.append(Order(
             user=BotUser.objects.get(id=fake.random_int(min=1, max=100)),
             category=Category.objects.get(id=fake.random_int(min=1, max=100)),
             subcategory=Subcategory.objects.get(id=fake.random_int(min=1, max=100)),
-            description=fake.text(),
-            description_uz = translate_en_uz(fake.text()),
-            description_en=fake.text(),
-            description_ru=translate_en_ru(fake.text()),
+            description=description,
+            description_uz = description_uz,
+            description_en=description_en,
+            description_ru=description_ru,
             status=fake.random_element(elements=('new', 'in_progress', 'done', 'rejected')),
         ))
     Order.objects.bulk_create(data)
@@ -100,12 +117,18 @@ def generate_comments() -> None:
     data = []
     fake = Faker()
     for _ in range(100):
+        
+        body = fake.text()
+        
+        body_ru = translate_en_ru(body)
+        body_uz = translate_en_uz(body)
+        body_en = body
         data.append(Comment(
-            order=Order.objects.get(id=fake.random_int(min=1, max=100)),
-            body=fake.text(),
-            body_uz = translate_en_uz(fake.text()),
-            body_en=fake.text(),
-            body_ru=translate_en_ru(fake.text()),
+            user=BotUser.objects.get(id=fake.random_int(min=1, max=100)),
+            body=body,
+            body_uz = body_uz,
+            body_en = body_en,
+            body_ru = body_ru,
         ))
     Comment.objects.bulk_create(data)
 
