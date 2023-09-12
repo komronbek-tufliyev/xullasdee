@@ -31,6 +31,27 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [filters.SearchFilter]
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = [filters.SearchFilter]
+
+class SubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = Subcategory.objects.all()
+    serializer_class = SubCategorySerializer
+    filter_backends = [filters.SearchFilter]
+
+class OrderHistoryViewSet(viewsets.ModelViewSet):
+    queryset = OrderHistory.objects.all()
+    serializer_class = OrderHistorySerializer
+    filter_backends = [filters.SearchFilter]
+
+class OrderFileViewSet(viewsets.ModelViewSet):
+    queryset = OrderFile.objects.all()
+    serializer_class = OrderFileSerializer
+    filter_backends = [filters.SearchFilter]
     
 
 from rest_framework.views import APIView
