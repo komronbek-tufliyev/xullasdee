@@ -18,5 +18,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/change_language/', ChangeLanguage.as_view(), name='change_language'),
     path('api/change-phone/', ChangePhoneNumber.as_view(), name='change_phone'),
-    
+    path('api/generate-fake-data/', generate_data, name='generate_data'),   
 ]

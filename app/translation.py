@@ -16,10 +16,7 @@ class CategoryTranslationOptions(TranslationOptions):
 class SubcategoryTranslationOptions(TranslationOptions):
     fields = ('name',)
 
-class BotUserTranslationOptions(TranslationOptions):
-    fields = ('full_name',)
 
-translator.register(BotUser, BotUserTranslationOptions)
 translator.register(Subcategory, SubcategoryTranslationOptions)
 translator.register(Category, CategoryTranslationOptions)
 translator.register(Comment, CommentTranslationOptions)
