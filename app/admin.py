@@ -29,7 +29,7 @@ class OrderInline(admin.TabularInline):
 
 
 @admin.register(BotUser)
-class BotUserAdmin(TranslationAdmin):
+class BotUserAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'username', 'telegram_id', 'phone_number', 'email', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
     search_fields = ('full_name', 'username', 'telegram_id', 'phone_number', 'email')
