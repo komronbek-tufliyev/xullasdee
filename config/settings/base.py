@@ -22,13 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
+    # # Local
+    'app.apps.AppConfig',
     # Third-party apps
     'rest_framework',
     # #### Django model translation ####
     'modeltranslation',
-    # # Local
-    'app.apps.AppConfig',
     
 
 ]
@@ -138,4 +138,6 @@ TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 
 USE_TZ = True
+
+
 
