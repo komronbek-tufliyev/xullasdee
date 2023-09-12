@@ -33,4 +33,34 @@ class OrderViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     
 
+from rest_framework.views import APIView
+
+class ChangeLanguage(APIView):
+    def post(self, request):
+        if not request.method == 'POST':
+            return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        data = request.data
+        telegram_id = data.get('telegram_id', None)
+        
+        try:
+            user = BotUser.objects.get(telegram_id=telegram_id)
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        user.language = data.get('language', user.language)
+        user.save()
+        return Response({'status': 'Language changed!'})
+    
+class ChangePhoneNumber(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        user.phone = data.get('phone')
+        user.save()
+        return Response({'status': 'Phone number changed!'})
+    
+
+
 
