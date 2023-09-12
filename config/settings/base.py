@@ -22,13 +22,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
+    # # Local
+    'app.apps.AppConfig',
     # Third-party apps
     'rest_framework',
     # #### Django model translation ####
     'modeltranslation',
-    # # Local
-    'app.apps.AppConfig',
     
 
 ]
@@ -139,6 +139,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -150,3 +151,4 @@ REST_FRAMEWORK = {
     # default ordering
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
+
