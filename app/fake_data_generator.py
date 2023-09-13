@@ -22,7 +22,7 @@ def translate_uz_en(text: str) -> str:
 def generate_bot_users() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         data.append(BotUser(
             full_name=fake.name(),
             username=fake.user_name(),
@@ -35,14 +35,11 @@ def generate_bot_users() -> None:
 def generate_categories() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
-        print(_, "generatsiya")
+    for _ in range(10):
         name = fake.name()
         name_uz = translate_en_uz(name)
         name_en = name
         name_ru = translate_en_ru(name)
-        print(f"{_}-generatsiya: {name_uz}, {name_en}, {name_ru}")
-
         data.append(Category(
             name=name,
             name_uz = name_uz,
@@ -55,7 +52,7 @@ def generate_categories() -> None:
 def generate_subcategories() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         name = fake.name()
         name_uz = translate_en_uz(name)
         name_en = name
@@ -67,7 +64,7 @@ def generate_subcategories() -> None:
             name_en=name_en,
             name_ru=name_ru,
             slug=fake.slug(),
-            category=Category.objects.get(id=fake.random_int(min=1, max=100)),
+            category=Category.objects.get(id=fake.random_int(min=1, max=10)),
         ))
     Subcategory.objects.bulk_create(data)
 
@@ -75,16 +72,16 @@ def generate_subcategories() -> None:
 def generate_orders() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         description = fake.text()
         description_ru = translate_en_ru(description)
         description_uz = translate_en_uz(description)
         description_en = description
 
         data.append(Order(
-            user=BotUser.objects.get(id=fake.random_int(min=1, max=100)),
-            category=Category.objects.get(id=fake.random_int(min=1, max=100)),
-            subcategory=Subcategory.objects.get(id=fake.random_int(min=1, max=100)),
+            user=BotUser.objects.get(id=fake.random_int(min=1, max=10)),
+            category=Category.objects.get(id=fake.random_int(min=1, max=10)),
+            subcategory=Subcategory.objects.get(id=fake.random_int(min=1, max=10)),
             description=description,
             description_uz = description_uz,
             description_en=description_en,
@@ -96,9 +93,9 @@ def generate_orders() -> None:
 def generate_order_files() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         data.append(OrderFile(
-            order=Order.objects.get(id=fake.random_int(min=1, max=100)),
+            order=Order.objects.get(id=fake.random_int(min=1, max=10)),
             file=fake.file_name(),
         ))
     OrderFile.objects.bulk_create(data)
@@ -106,9 +103,9 @@ def generate_order_files() -> None:
 def generate_order_histories() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         data.append(OrderHistory(
-            order=Order.objects.get(id=fake.random_int(min=1, max=100)),
+            order=Order.objects.get(id=fake.random_int(min=1, max=10)),
             status=fake.random_element(elements=('new', 'in_progress', 'done', 'rejected')),
         ))
     OrderHistory.objects.bulk_create(data)
@@ -116,7 +113,7 @@ def generate_order_histories() -> None:
 def generate_comments() -> None:
     data = []
     fake = Faker()
-    for _ in range(100):
+    for _ in range(10):
         
         body = fake.text()
         
@@ -124,7 +121,7 @@ def generate_comments() -> None:
         body_uz = translate_en_uz(body)
         body_en = body
         data.append(Comment(
-            user=BotUser.objects.get(id=fake.random_int(min=1, max=100)),
+            user=BotUser.objects.get(id=fake.random_int(min=1, max=10)),
             body=body,
             body_uz = body_uz,
             body_en = body_en,

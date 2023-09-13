@@ -30,13 +30,13 @@ class OrderInline(admin.TabularInline):
 
 @admin.register(BotUser)
 class BotUserAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'username', 'telegram_id', 'phone_number', 'email', 'created_at', 'updated_at')
+    list_display = ('full_name', 'username', 'language', 'telegram_id', 'phone_number', 'email', 'workplace', 'position',)
     list_filter = ('created_at', 'updated_at')
-    search_fields = ('full_name', 'username', 'telegram_id', 'phone_number', 'email')
+    search_fields = ('full_name', 'username', 'telegram_id', 'phone_number', 'workplace', 'position',)
     inlines = (OrderInline,)
     fieldsets = (
         (_('User'), {
-            'fields': ('full_name', 'username', 'telegram_id', 'phone_number', 'email')
+            'fields': ('full_name', 'username', 'language', 'telegram_id', 'phone_number', 'email', 'workplace', 'position',)
         }),
         # (_('Date and time'), {
         #     'fields': ('created_at', 'updated_at')
@@ -69,9 +69,9 @@ class SubcategoryAdmin(TranslationAdmin):
 
 @admin.register(Order)
 class OrderAdmin(TranslationAdmin):
-    list_display = ('user', 'category', 'subcategory', 'status', 'created_at', 'updated_at')
+    list_display = ('type', 'user', 'category', 'subcategory', 'status', 'created_at', 'updated_at')
     list_filter = ('category', 'subcategory', 'status', 'created_at', 'updated_at')
-    search_fields = ('user', 'category', 'subcategory', 'status')
+    search_fields = ('type', 'user', 'category', 'subcategory', 'status')
     inlines = (OrderFileInline, OrderHistoryInline,)
     fieldsets = (
         (_('Order'), {
@@ -122,6 +122,28 @@ class CommentAdmin(admin.ModelAdmin):
         # (_('Date and time'), {
         #     'fields': ('created_at',)
         # }),
+    )
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'name', 'price', 'duration',)
+    search_fields = ('order', 'name', 'price', 'duration',)
+    list_filter = ('order',)
+    fieldsets = (
+        (_('Order item'), {
+            'fields': ('order', 'name', 'price', 'duration',)
+        }),
+    )
+
+@admin.register(PaymentHistory)
+class PaymentHistoryAdmin(admin.ModelAdmin):
+    list_display = ('order', 'amount', 'payment_provider',)
+    search_fields = ('order', 'amount', 'payment_provider',)
+    list_filter = ('order', 'payment_provider',)
+    fieldsets = (
+        (_('Payment history'), {
+            'fields': ('order', 'amount', 'payment_provider',)
+        }),
     )
 
 

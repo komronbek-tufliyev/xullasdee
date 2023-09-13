@@ -11,10 +11,14 @@ from .serializers import *
 from .models import *
 from app.fake_data_generator import *
 
+from django.shortcuts import redirect
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    # if requested user is admin then redirect to admin page
+    # if request.user.is_superuser:
+    #     return redirect('/admin/')
+    return redirect('schema-swagger-ui')
 
 def generate_data(request):
     generate_fake_data()
@@ -131,5 +135,179 @@ class ChangePhoneNumber(APIView):
         return Response({'status': 'Phone number changed!'})
     
 
+class MyOrdersView(APIView):
+    def get(self, request):
+        data = request.GET
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        orders = Order.objects.filter(user=user)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
+class SetOrderView(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
 
+        # order info
+        order, created = Order.objects.get_or_create(user=user)
+        order.type = data.get('type')
+        order.category = Category.objects.get(id=data.get('category'))
+        order.subcategory = Subcategory.objects.get(id=data.get('subcategory'))
+        order.description = data.get('description')
+        order.user = user
+        order.save()
+
+        # order item info
+        order_item, created = OrderItem.objects.get_or_create(order=order)
+        order_item.order = order
+        order_item.name = data.get('name')
+        order_item.duration = data.get('duration')
+        order_item.price = data.get('price')
+        order_item.save()
+
+        # order files info
+        files = request.FILES.getlist('files')
+        for file in files:
+            OrderFile.objects.create(order=order, file=file)
+
+        return Response({'status': 'Order set!'})
+    
+
+class ChangeOrderStatusView(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        order = Order.objects.get(id=data.get('order_id'))
+        order.status = data.get('status')
+        order.save()
+        return Response({'status': 'Order status changed!'})
+    
+
+class SetOrderHistoryView(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        order = Order.objects.get(id=data.get('order_id'))
+        OrderHistory.objects.create(order=order, status=data.get('status'))
+        return Response({'status': 'Order history created!'})
+
+class GetOrderHistoryView(APIView):
+    def get(self, request):
+        data = request.GET
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        order = Order.objects.get(id=data.get('order_id'))
+        order_history = OrderHistory.objects.filter(order=order)
+        serializer = OrderHistorySerializer(order_history, many=True)
+        return Response(serializer.data)
+    
+
+class CheckOrderStatusView(APIView):
+    def get(self, request):
+        data = request.GET
+        data = data.dict()
+        # telegram_id = data.get('telegram_id')
+        # order_id = data.get('order_id')
+        # user = BotUser.objects.get(telegram_id=telegram_id)
+        order = get_object_or_404(Order, id=data.get('order_id'))
+        return Response({'status': order.status})
+    
+class DeleteOrderView(APIView):
+    def delete(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        order = Order.objects.get(id=data.get('order_id'))
+        order.delete()
+        return Response({'status': 'Order deleted!'})
+    
+class GetOrderFilesView(APIView):
+    def get(self, request):
+        data = request.GET
+        data = data.dict()
+        # telegram_id = data.get('telegram_id')
+        # user = BotUser.objects.get(telegram_id=telegram_id)
+        try:
+            order = Order.objects.get(id=data.get('order_id'))
+            order_files = OrderFile.objects.filter(order=order)
+            serializer = OrderFileSerializer(order_files, many=True)
+            return Response(serializer.data)
+        except Order.DoesNotExist:
+            return Response({'status': 'Order not found!'})
+        except Exception as e:
+            print({'status': str(e)})
+            pass
+        return Response({'status': 'Order files not found!'})
+    
+    
+####### Change Order Files #######
+class ChangeOrderFilesView(APIView):
+    def post(self, request):
+        """"
+        Change order files
+        """
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        try:
+            user = BotUser.objects.get(telegram_id=telegram_id)
+            order = Order.objects.get(id=data.get('order_id'))
+            files = request.FILES.getlist('files')
+            for file in files:
+                OrderFile.objects.create(order=order, file=file)
+        except Order.DoesNotExist:
+            return Response({'status': 'Order not found!'})
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found!'})
+        except Exception as e:
+            print({'status': str(e)})
+            pass
+
+        return Response({'status': 'Order files changed!'})
+    
+###### Change Order Item #####
+class ChangeOrderItemView(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        # telegram_id = data.get('telegram_id')
+        # user = BotUser.objects.get(telegram_id=telegram_id)
+        try:
+            order = Order.objects.get(id=data.get('order_id'))
+            order_item = OrderItem.objects.get(order=order)
+            order_item.name = data.get('name')
+            order_item.duration = data.get('duration')
+            order_item.price = data.get('price')
+            order_item.save()
+        except Order.DoesNotExist:
+            return Response({'status': 'Order not found!'})
+        except OrderItem.DoesNotExist:
+            return Response({'status': 'Order item not found!'})
+        except Exception as e:
+            print({'status': str(e)})
+            pass
+
+        return Response({'status': 'Order item changed!'})
+    
+
+#####   Payment  (Create Payment History) #####
+class PaymentView(APIView):
+    def post(self, request):
+        data = request.POST
+        data = data.dict()
+        telegram_id = data.get('telegram_id')
+        user = BotUser.objects.get(telegram_id=telegram_id)
+        order = Order.objects.get(id=data.get('order_id'))
+        PaymentHistory.objects.create(order=order, amount=data.get('amount'), status=data.get('status'))
+        return Response({'status': 'Payment history created!'})
+    

@@ -110,6 +110,8 @@ JAZZMIN_SETTINGS = {
         "app.OrderFile": "fas fa-file",
         "app.OrderHistory": "fas fa-history",
         'app.Comment': 'fas fa-comment-dots',
+        "app.OrderItem": "fas fa-shopping-bag",
+        "app.PaymentHistory": "fas fa-money-bill-wave",
         # "app.Product": "fas fa-shopping-cart",
         # "app.OrderItem": "fas fa-shopping-bag",
         # messages

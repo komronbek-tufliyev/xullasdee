@@ -29,9 +29,12 @@ INSTALLED_APPS = [
     'rest_framework',
     # #### Django model translation ####
     'modeltranslation',
-    
 
+    # #### Django REST Swagger ####
+    'drf_yasg',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

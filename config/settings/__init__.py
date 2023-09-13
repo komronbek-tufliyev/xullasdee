@@ -11,6 +11,10 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 if ENVIRONMENT == 'development':
     from .development import *
+    # debug toolbar settings
+    INTERNAL_IPS = [
+        '127.0.0.1', 'localhost'
+    ]
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     
