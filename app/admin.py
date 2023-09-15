@@ -75,7 +75,7 @@ class OrderAdmin(TranslationAdmin):
     inlines = (OrderFileInline, OrderHistoryInline,)
     fieldsets = (
         (_('Order'), {
-            'fields': ('user', 'category', 'subcategory', 'description', 'status')
+            'fields': ('type', 'user', 'category', 'subcategory', 'description', 'status')
         }),
         # (_('Date and time'), {
         #     'fields': ('created_at', 'updated_at')

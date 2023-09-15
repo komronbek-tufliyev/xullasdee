@@ -6,7 +6,6 @@ from rest_framework.decorators import action
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework import filters
-
 from .serializers import *
 from .models import *
 from app.fake_data_generator import *
@@ -126,56 +125,83 @@ class ChangeLanguage(APIView):
     
 class ChangePhoneNumber(APIView):
     def post(self, request):
-        data = request.POST
-        data = data.dict()
-        telegram_id = data.get('telegram_id')
-        user = BotUser.objects.get(telegram_id=telegram_id)
-        user.phone = data.get('phone')
-        user.save()
-        return Response({'status': 'Phone number changed!'})
-    
+        if not request.method == 'POST':
+            return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        data = request.data
+        if not data.get('telegram_id'):
+            return Response({'status': 'telegram_id is required!'}, status=status.HTTP_400_BAD_REQUEST)
+        if not data.get('phone_number'):
+            return Response({'status': 'phone_number is required!'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            telegram_id = int(data.get('telegram_id'))
+            user = get_object_or_404(BotUser, telegram_id=telegram_id)
+            user.phone_number = data.get('phone_number')
+            user.save()
+            return Response({'status': 'Phone number changed!'}, status=status.HTTP_200_OK)
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found!'}, status=status.HTTP_404_NOT_FOUND)
+        except ValueError:
+            return Response({'status': 'Invalid telegram_id format!'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'status': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 
 class MyOrdersView(APIView):
     def get(self, request):
-        data = request.GET
-        data = data.dict()
-        telegram_id = data.get('telegram_id')
-        user = BotUser.objects.get(telegram_id=telegram_id)
-        orders = Order.objects.filter(user=user)
-        serializer = OrderSerializer(orders, many=True)
-        return Response(serializer.data)
+        data = request.data
+        try:
+            telegram_id = data.get('telegram_id')
+            user = BotUser.objects.get(telegram_id=telegram_id)
+            orders = Order.objects.filter(user=user)
+            serializer = OrderSerializer(orders, many=True)
+            return Response(serializer.data)
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found!'})
+        except Exception as e:
+            print({'status': str(e)})
+            pass
 
 class SetOrderView(APIView):
     def post(self, request):
         data = request.POST
         data = data.dict()
-        telegram_id = data.get('telegram_id')
-        user = BotUser.objects.get(telegram_id=telegram_id)
+        try:
+            telegram_id = data.get('telegram_id')
+            user = BotUser.objects.get(telegram_id=telegram_id)
+            # order info
+            order, created = Order.objects.get_or_create(user=user)
+            order.type = data.get('type')
+            order.category = Category.objects.get(id=data.get('category'))
+            order.subcategory = Subcategory.objects.get(id=data.get('subcategory'))
+            order.description = data.get('description')
+            order.user = user
+            order.save()
 
-        # order info
-        order, created = Order.objects.get_or_create(user=user)
-        order.type = data.get('type')
-        order.category = Category.objects.get(id=data.get('category'))
-        order.subcategory = Subcategory.objects.get(id=data.get('subcategory'))
-        order.description = data.get('description')
-        order.user = user
-        order.save()
+            # order item info
+            order_item, created = OrderItem.objects.get_or_create(order=order)
+            order_item.order = order
+            order_item.name = data.get('name')
+            order_item.duration = data.get('duration')
+            order_item.price = data.get('price')
+            order_item.save()
 
-        # order item info
-        order_item, created = OrderItem.objects.get_or_create(order=order)
-        order_item.order = order
-        order_item.name = data.get('name')
-        order_item.duration = data.get('duration')
-        order_item.price = data.get('price')
-        order_item.save()
+            # order files info
+            files = request.FILES.getlist('files')
+            for file in files:
+                OrderFile.objects.create(order=order, file=file)
 
-        # order files info
-        files = request.FILES.getlist('files')
-        for file in files:
-            OrderFile.objects.create(order=order, file=file)
-
-        return Response({'status': 'Order set!'})
-    
+            return Response({'status': 'Order set!'})
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found!'})
+        except Category.DoesNotExist:
+            return Response({'status': 'Category not found!'})
+        except Subcategory.DoesNotExist:
+            return Response({'status': 'Subcategory not found!'})
+        except Exception as e:
+            print({'status': str(e)})
+            pass
+        return Response({'status': 'Order not set!'})
 
 class ChangeOrderStatusView(APIView):
     def post(self, request):
