@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/set-order-history/', SetOrderHistoryView.as_view(), name='set_order_history'),
 
     # GET methods
+    path('api/language-info/', GetLanguageView.as_view(), name='language_info'),
     path('api/my-orders/', MyOrdersView.as_view(), name='my_orders'),
     path('api/order-status/', CheckOrderStatusView.as_view(), name='order_status'),
     path('api/get-files/', GetOrderFilesView.as_view(), name='get_files'),

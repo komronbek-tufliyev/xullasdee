@@ -123,6 +123,22 @@ class ChangeLanguage(APIView):
         user.save()
         return Response({'status': 'Language changed!'})
     
+
+class GetLanguageView(APIView):
+    def get(self, request):
+        if not request.method == 'GET':
+            return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        data = request.data
+        telegram_id: int = int(data.get('telegram_id', None))
+        
+        try:
+            LANGUAGE: str = BotUser.objects.only('language').get(telegram_id=telegram_id)
+        except BotUser.DoesNotExist:
+            return Response({'status': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({'language': LANGUAGE})
+
+
 class ChangePhoneNumber(APIView):
     def post(self, request):
         if not request.method == 'POST':
