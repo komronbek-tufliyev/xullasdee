@@ -42,7 +42,7 @@ class BotUser(models.Model):
     language = models.CharField(max_length=2, verbose_name=_('Language'), help_text=_('Language of user'), choices=LANGUAGE, default='uz')
 
     def __str__(self) -> str:
-        return self.full_name
+        return f"{self.telegram_id}"
     
     class Meta:
         verbose_name = _('Bot user')

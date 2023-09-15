@@ -116,6 +116,7 @@ class ChangeLanguage(APIView):
         try:
             telegram_id = data.get('telegram_id', None)
             user = BotUser.objects.get(telegram_id=telegram_id)
+            print(user)
         except BotUser.DoesNotExist:
             return Response({'status': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -155,6 +156,7 @@ class ChangePhoneNumber(APIView):
             return Response({'status': 'phone_number is required!'}, status=status.HTTP_400_BAD_REQUEST)
         try:
             telegram_id = int(data.get('telegram_id'))
+            print(telegram_id, type(telegram_id))
             user = get_object_or_404(BotUser, telegram_id=telegram_id)
             user.phone_number = data.get('phone_number')
             user.save()

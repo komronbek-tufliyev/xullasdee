@@ -30,7 +30,7 @@ class OrderInline(admin.TabularInline):
 
 @admin.register(BotUser)
 class BotUserAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'username', 'language', 'telegram_id', 'phone_number', 'email', 'workplace', 'position',)
+    list_display = ('telegram_id', 'username', 'language', 'full_name', 'phone_number', 'email', 'workplace', 'position',)
     list_filter = ('created_at', 'updated_at')
     search_fields = ('full_name', 'username', 'telegram_id', 'phone_number', 'workplace', 'position',)
     inlines = (OrderInline,)
