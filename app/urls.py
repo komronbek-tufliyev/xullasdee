@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     
     # Auth endpoints. POST methods
-    path('api/change_language/', ChangeLanguage.as_view(), name='change_language'),
+    path('api/change-language/', ChangeLanguage.as_view(), name='change_language'),
     path('api/change-phone/', ChangePhoneNumber.as_view(), name='change_phone'),
     # POST method. Generate fake data
     path('api/generate-fake-data/', generate_data, name='generate_data'),

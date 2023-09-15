@@ -112,9 +112,9 @@ class ChangeLanguage(APIView):
         if not request.method == 'POST':
             return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         data = request.data
-        telegram_id = data.get('telegram_id', None)
         
         try:
+            telegram_id = data.get('telegram_id', None)
             user = BotUser.objects.get(telegram_id=telegram_id)
         except BotUser.DoesNotExist:
             return Response({'status': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -125,18 +125,22 @@ class ChangeLanguage(APIView):
     
 
 class GetLanguageView(APIView):
-    def get(self, request):
-        if not request.method == 'GET':
-            return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        data = request.data
-        telegram_id: int = int(data.get('telegram_id', None))
+    def get(self, request, *args, **kwargs):
+        data = request.GET
+        
+        if 'telegram_id' not in data:
+            return Response({'status': 'telegram_id is required!'}, status=status.HTTP_400_BAD_REQUEST)
+        telegram_id: int = data.get('telegram_id', None)
         
         try:
-            LANGUAGE: str = BotUser.objects.only('language').get(telegram_id=telegram_id)
+            LANGUAGE = BotUser.objects.only('language').get(telegram_id=telegram_id)
+            print(LANGUAGE)
+            return Response(BotUserSerializer(LANGUAGE).data)
         except BotUser.DoesNotExist:
             return Response({'status': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        return Response({'language': LANGUAGE})
+        except Exception as e:
+            print({'status': str(e)})
+            return Response({'status': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ChangePhoneNumber(APIView):
