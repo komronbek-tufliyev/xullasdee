@@ -145,7 +145,7 @@ class GetLanguageView(APIView):
 
 
 class ChangePhoneNumber(APIView):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         if not request.method == 'POST':
             return Response({'status': 'Method not allowed!'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
