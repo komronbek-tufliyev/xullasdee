@@ -170,19 +170,24 @@ class ChangePhoneNumber(APIView):
         
 
 class MyOrdersView(APIView):
-    def get(self, request):
-        data = request.data
+    def get(self, request, *args, **kwargs):
+        data = request.GET
+        
+        if 'telegram_id' not in data:
+            return Response({'status': 'telegram_id is required!'}, status=status.HTTP_400_BAD_REQUEST)
+        telegram_id: int = data.get('telegram_id', None)
         try:
             telegram_id = data.get('telegram_id')
             user = BotUser.objects.get(telegram_id=telegram_id)
-            orders = Order.objects.filter(user=user)
+            orders = Order.objects.filter(user=user, status__ne='deleted')
             serializer = OrderSerializer(orders, many=True)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except BotUser.DoesNotExist:
-            return Response({'status': 'User not found!'})
+            return Response({'status': 'User not found!'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             print({'status': str(e)})
-            pass
+            
+        return Response({'status': 'Orders not found!'}, status=status.HTTP_404_NOT_FOUND)
 
 class SetOrderView(APIView):
     def post(self, request):
