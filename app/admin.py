@@ -82,7 +82,7 @@ class OrderAdmin(TranslationAdmin):
         # }),
     )
 
-@admin.register(OrderFile)
+@admin. register(OrderFile)
 class OrderFileAdmin(admin.ModelAdmin):
     list_display = ('order', 'file', 'created_at')
     list_filter = ('order', 'created_at')
