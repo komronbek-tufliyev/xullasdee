@@ -1,6 +1,8 @@
 from .base import *
 from .django_jazzmin import *
+import pymysql
 
+pymysql.install_as_MySQLdb()
 SECRET_KEY = env.str('SECRET_KEY')
 ENVIRONMENT = env.str('ENVIRONMENT', default='development')
 DEBUG = env.bool('DEBUG', default=True)
