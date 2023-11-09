@@ -9,7 +9,7 @@ DATABASES = {
         "USER": env.str("DB_USER"),
         "PASSWORD": env.str("DB_PASSWORD"),
         "HOST": "localhost",# env.str("DB_HOST")        
-        "PORT": 5432, # env.str("DB_PORT"),
+        "PORT": env.int("DB_PORT"), # env.str("DB_PORT"),
         "ATOMIC_REQUESTS": True,
         
     }
